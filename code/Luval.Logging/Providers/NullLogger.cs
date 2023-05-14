@@ -11,6 +11,9 @@ namespace Luval.Logging.Providers
 {
     public class NullLogger : BaseLogger
     {
+
+        private static NullLogger _instance = new NullLogger();
+
         public NullLogger() : this(new BasicConfig() { LogVerbosity = LogVerbosity.None })
         {
 
@@ -25,6 +28,8 @@ namespace Luval.Logging.Providers
         {
             Debug.WriteLine(message);
         }
+
+        public static NullLogger Instance => _instance;
 
     }
 }
