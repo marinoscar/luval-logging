@@ -14,6 +14,11 @@ namespace Luval.Logging.Providers
         private FileConfiguration _configuration;
         private FileInfo _file;
 
+        public FileLogger() : this(new FileConfiguration())
+        {
+            
+        }
+
         public FileLogger(FileConfiguration configuration) : base(configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -22,7 +27,7 @@ namespace Luval.Logging.Providers
 
         protected override void DoLog(LogLevel logLevel, EventId eventId, Exception? exception, string message)
         {
-            File.AppendAllText(message, GetFile().FullName);
+            File.AppendAllText(GetFile().FullName, message);
         }
 
         private FileInfo GetFile()
@@ -41,7 +46,7 @@ namespace Luval.Logging.Providers
 
         private string GetNamePattern()
         {
-            return _file.Name.Replace(_file.Extension, "") + "*";
+            return _file.Name.Replace(_file.Extension, "") + "*" + _file.Extension;
         }
 
         private List<FileInfo> GetAllFiles()
