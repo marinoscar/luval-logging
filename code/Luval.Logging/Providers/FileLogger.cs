@@ -13,6 +13,7 @@ namespace Luval.Logging.Providers
 
         private FileConfiguration _configuration;
         private FileInfo _file;
+        private DateTime? _utcCleanCheck;
 
         public FileLogger() : this(new FileConfiguration())
         {
@@ -28,6 +29,7 @@ namespace Luval.Logging.Providers
         protected override void DoLog(LogLevel logLevel, EventId eventId, Exception? exception, string message)
         {
             File.AppendAllText(GetFile().FullName, message);
+            ValidateCleanUp();
         }
 
         private FileInfo GetFile()
@@ -44,15 +46,42 @@ namespace Luval.Logging.Providers
 
         }
 
+
+        private void ValidateCleanUp()
+        {
+            if(_utcCleanCheck == null)
+            {
+                _utcCleanCheck = DateTime.UtcNow;
+                CleanDirectoryAsync();
+                return;
+            }
+            if(DateTime.UtcNow.Subtract(_utcCleanCheck.Value).TotalHours > 4)
+            {
+                CleanDirectoryAsync();
+                _utcCleanCheck = DateTime.UtcNow;
+            }
+        }
+
         private string GetNamePattern()
         {
             return _file.Name.Replace(_file.Extension, "") + "*" + _file.Extension;
         }
 
-        private List<FileInfo> GetAllFiles()
+        public List<FileInfo> GetAllFiles()
         {
             var dirInfo = new DirectoryInfo(_configuration.DirectoryName);
-            return dirInfo.GetFiles(GetNamePattern(), SearchOption.TopDirectoryOnly).OrderByDescending(i => i.Name).ToList();
+            return dirInfo.GetFiles(GetNamePattern(), SearchOption.TopDirectoryOnly).OrderByDescending(i => i.CreationTimeUtc).ToList();
+        }
+
+        public Task CleanDirectoryAsync()
+        {
+            return Task.Run(() => { 
+                var files = GetAllFiles().Skip(_configuration.TotalFilesInDirectory).ToList();
+                foreach (var file in files)
+                {
+                    file.Delete();
+                }
+            });
         }
     }
 }
