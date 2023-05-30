@@ -12,6 +12,7 @@
     <PackageIcon>LV-Luval-Logo-200x200.png</PackageIcon>
     <RepositoryUrl>https://github.com/marinoscar/luval-logging</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
