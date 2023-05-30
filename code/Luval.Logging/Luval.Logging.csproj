@@ -4,7 +4,26 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>luval-128x128.ico</ApplicationIcon>
+    <Title>Luval Logging</Title>
+    <Company>$(Authors)</Company>
+    <Authors>Oscar Marin</Authors>
+    <PackageProjectUrl>https://github.com/marinoscar/luval-logging</PackageProjectUrl>
+    <PackageIcon>LV-Luval-Logo-200x200.png</PackageIcon>
+    <RepositoryUrl>https://github.com/marinoscar/luval-logging</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="luval-128x128.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\img\LV-Luval-Logo-200x200.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
